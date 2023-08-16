@@ -1,0 +1,33 @@
+   {%extends './index.html'%}
+          {%block star%}
+
+    <center>                        
+            <div class="star" style="border:1px solid #ddd; padding: 15px; border-radius: 5px; width: 240px; text-align: right;">
+
+                    <h2 class="h4">مقلات پر بازدید ماه</h2>
+                    <hr>
+                        {%for a in star%}
+                        <div>
+                            {%if a.private%}
+                            {%else%}
+                        <a  href="{%url 'detail' a.id%}" style="color:#000;  text-decoration: none;">{{a.post|truncatewords:3}}</a>
+                        </div>
+                        {%endif%}
+
+                            {%endfor%}
+                        <hr>
+                    <h2 class="h4">مقالات های داغ</h2>
+
+                       {%for a in starcomment%}
+                        <div>
+                        {%if a.private%}
+                            {%else%}
+                        <a  href="{%url 'detail' a.id%}" style="color:#000;  text-decoration: none;">{{a.post|truncatewords:3}}</a>
+                             {%endif%}
+
+                        {%endfor%}
+                        </div>                       
+                 </div>
+</center>
+
+{%endblock%}

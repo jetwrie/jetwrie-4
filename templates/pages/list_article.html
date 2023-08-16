@@ -1,0 +1,54 @@
+{%extends './base.html'%}
+{% load ratings %}
+{% load humanize %}
+
+{%block content%}
+
+
+<div class="w3-row-padding">
+{%for article in object_list %}
+    <div class="w3-third w3-container w3-margin-bottom">
+      {%if article.pictures%}
+      <img src="{{article.pictures.url}}" alt="{{article.post}}" style="width:100%" class="w3-hover-opacity">
+      {%endif%}
+      {%if article.video%}
+      <video class="video-fluid" style="width:100%" class="w3-hover-opacity" controls>
+          <source src="{{article.video.url}}" type="video/mp4" /></video>
+      {%endif%}
+      <div class="w3-container w3-white">
+        {%if article.private%}
+        <p>{{article.post}}</p>
+        {%else%}
+        <p><a href="{%url 'detail' article.id %}" style="text-decoration: none;">{{article.post}}</a></p>
+        {%endif%}
+        {%if article.author.pictures%}    
+        <img style="border-radius:4px; width: 50px;" src="{{article.author.pictures.url}}">
+        {%endif%}
+      {%if article.author.first_name or article.author.last_name%}
+        {%if article.author.first_name%}
+          {{article.author.first_name}}
+        {%endif%}
+        {%if article.author.last_name%}
+          {{article.author.last_name}}
+        {%endif%}
+      {%else%}
+      {{article.author}}
+      {%endif%}
+      <br>
+      <small>Views: {{article.hits.count}}</small>
+      <p>{{article.publish|naturaltime}}</p>
+      {% ratings article %}   
+      <br>
+       {%for cat in article.category.all%}              
+          <a href="{%url 'category' cat.slug%}">
+          <br>
+              #{{cat.title}}</a>
+          <br>
+      {%endfor%}
+
+      <a href="{%url 'update' article.id%}">Edit</a>        
+       <a href="{%url 'delete' article.id%}">Delete</a>        
+    </div>
+</div>
+{%endfor%}
+{%endblock content%}

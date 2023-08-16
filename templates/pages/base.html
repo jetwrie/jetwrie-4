@@ -1,0 +1,175 @@
+{%load static%}
+{% load ratings %}
+{% load humanize %}
+<!DOCTYPE html>
+<html>
+<head>
+<title> 
+{%block title%}
+Jetwrie version 4
+{%endblock title%}
+</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="{%static 'icon/favicon.ico'%}"/>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+</style>
+</head>
+<body class="w3-light-grey w3-content" style="max-width:1600px">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container">
+    <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+      <i class="fa fa-remove"></i>
+    </a>
+    {%if user.pictures%}
+    <img src="{{user.pictures.url}}" style="width:35%;" class="w3-round"><br><br>
+    {%endif%}
+    <h4><b>
+    {%if user.first_name or user.last_name%}
+        {%if user.first_name%}
+        {{user.first_name}}
+        {%endif%}
+        {%if user.last_name%}
+        {{user.last_name}}
+        {%endif%}
+        {%else%}
+        {{user.username}}
+    {%endif%}
+
+    </b></h4>
+    <p class="w3-text-grey"></p>
+  </div>
+  <div class="w3-bar-block">
+    <a href="{%url 'home'%}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+  <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+  <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+  </svg> Home</a> 
+    <a href="{%url 'create'%}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-postcard-fill" viewBox="0 0 16 16">
+    <path d="M11 8h2V6h-2v2Z"/>
+    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm8.5.5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7ZM2 5.5a.5.5 0 0 0 .5.5H6a.5.5 0 0 0 0-1H2.5a.5.5 0 0 0-.5.5ZM2.5 7a.5.5 0 0 0 0 1H6a.5.5 0 0 0 0-1H2.5ZM2 9.5a.5.5 0 0 0 .5.5H6a.5.5 0 0 0 0-1H2.5a.5.5 0 0 0-.5.5Zm8-4v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5Z"/>
+    </svg> Create Post</a> 
+    <a href="{%url 'list'%}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mailbox2" viewBox="0 0 16 16">
+  <path d="M9 8.5h2.793l.853.854A.5.5 0 0 0 13 9.5h1a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-.5-.5H9v1z"/>
+  <path d="M12 3H4a4 4 0 0 0-4 4v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7a4 4 0 0 0-4-4zM8 7a3.99 3.99 0 0 0-1.354-3H12a3 3 0 0 1 3 3v6H8V7zm-3.415.157C4.42 7.087 4.218 7 4 7c-.218 0-.42.086-.585.157C3.164 7.264 3 7.334 3 7a1 1 0 0 1 2 0c0 .334-.164.264-.415.157z"/>
+  </svg>  My Posts</a>
+    <a href="{%url 'profile'%}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+  <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+</svg> Profile</a>
+    <a href="{%url 'passwordchange'%}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+  <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+  <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+</svg> Change Password</a>
+    <a href="{%url 'logout'%}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+  </svg> Logout</a>
+
+  </div>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px">
+
+  <!-- Header -->
+  <header id="portfolio">
+    <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+    <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+    <div class="w3-container">
+    <h1><b>Posts</b></h1>
+    <div class="w3-section w3-bottombar w3-padding-16">
+      <span class="w3-margin-right">Filter:</span> 
+      <a href="{%url 'home'%}" class="w3-button w3-black">ALL</a>
+      
+      {%for cat in category.all%}
+      <a href="{%url 'category' cat.slug%}" class="w3-button w3-white">{{cat.title}}</a>
+      {%endfor%}
+
+
+
+       <form class="w3-button w3-hide-small" action="{%url 'search'%}" method="GET">
+          {%csrf_token%}
+          <input type="text" name="searched" placeholder="Search" >
+          <button class="w3-button w3-black">Search</button>
+       </form>
+
+    </div>
+    </div>
+  </header>
+  
+  <!-- First Photo Grid-->
+  {%block content%}
+
+  <div class="w3-row-padding">
+    {%for article in star%}
+    <div class="w3-third w3-container w3-margin-bottom">
+      {%if article.pictures%}
+      <img src="{{article.pictures.url}}" alt="{{article.post}}" style="width:100%" class="w3-hover-opacity">
+      {%endif%}
+      {%if article.video%}
+      <video class="video-fluid" style="width:100%" class="w3-hover-opacity" controls>
+          <source src="{{article.video.url}}" type="video/mp4" /></video>
+      {%endif%}
+      <div class="w3-container w3-white">
+        <p><a href="{%url 'detail' article.id %}" style="text-decoration: none;">{{article.post}}</a></p>
+        {%if article.author.pictures%}    
+        <img style="border-radius:4px; width: 50px;" src="{{article.author.pictures.url}}">
+        {%endif%}
+      {%if article.author.first_name or article.author.last_name%}
+        {%if article.author.first_name%}
+          {{article.author.first_name}}
+        {%endif%}
+        {%if article.author.last_name%}
+          {{article.author.last_name}}
+        {%endif%}
+      {%else%}
+      {{article.author}}
+      {%endif%}
+      <br>
+      <small>Views: {{article.hits.count}}</small>
+      <p>{{article.publish|naturaltime}}</p>
+      {% ratings article %}
+          <br>
+          {%for cat in article.category.all%}              
+          <a href="{%url 'category' cat.slug%}">
+          <br>
+              #{{cat.title}}</a>
+          <br>
+          {%endfor%}
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+
+
+
+  {%endblock content%}
+  <!-- Images of Me -->
+  
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("myOverlay").style.display = "block";
+}
+ 
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("myOverlay").style.display = "none";
+}
+</script>
+
+</body>
+</html>

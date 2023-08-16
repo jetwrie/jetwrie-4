@@ -1,0 +1,50 @@
+{%extends './base.html'%}
+{% load widget_tweaks %}
+{% load comment_tags %}
+{% load ratings %}
+{% load humanize %}
+
+{%block content%}
+<div class="w3-row-padding">
+    
+    <div class="w3-third w3-container w3-margin-bottom">
+      {%if article.pictures%}
+      <img src="{{article.pictures.url}}" alt="{{article.post}}" style="width:100%" class="w3-hover-opacity">
+      {%endif%}
+      {%if article.video%}
+      <video class="video-fluid" style="width:100%" class="w3-hover-opacity" controls>
+          <source src="{{article.video.url}}" type="video/mp4" /></video>
+      {%endif%}
+      <div class="w3-container w3-white">
+        <p>{{article.post}}</a></p>
+        {%if article.author.pictures%}    
+        <img style="border-radius:4px; width: 50px;" src="{{article.author.pictures.url}}">
+        {%endif%}
+      {%if article.author.first_name or article.author.last_name%}
+        {%if article.author.first_name%}
+          {{article.author.first_name}}
+        {%endif%}
+        {%if article.author.last_name%}
+          {{article.author.last_name}}
+        {%endif%}
+      {%else%}
+      {{article.author}}
+      {%endif%}
+      <br>
+      <small>Views: {{article.hits.count}}</small>
+      <p>{{article.publish|naturaltime}}</p>
+      {% ratings article %}
+          <br>
+          {%for cat in article.category.all%}              
+          <a href="{%url 'category' cat.slug%}">
+          <br>
+              #{{cat.title}}</a>
+          <br>        
+         {% endfor %}  
+      </div>
+    </div>
+{% render_comments article request %}
+
+{% include_bootstrap %}
+
+{%endblock content%}
